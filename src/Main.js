@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import SignIn from './components/SignInScreen';
 import SignUp from './components/SignUpScreen';
 import Home from './components/Home';
+import { Button } from 'react-native-paper';
 const Stack = createNativeStackNavigator();
 
 // create a component
@@ -32,7 +33,21 @@ const MainComponent = () => {
   }, [user.token]);
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={({ navigation }) => ({
+          headerRight: () => (
+            <Button
+              onPress={() => {
+                AsyncStorage.clear();
+                setUser({
+                  token: null,
+                  user: {},
+                });
+              }}>
+              Log out
+            </Button>
+          ),
+        })}>
         {user.token ? (
           <>
             <Stack.Screen name='Home'>
@@ -45,10 +60,18 @@ const MainComponent = () => {
               name='SignIn'
               options={{
                 title: 'Sign in',
+                headerRight: '',
               }}>
               {(props) => <SignIn user={user} setUser={setUser} {...props} />}
             </Stack.Screen>
-            <Stack.Screen name='SignUp' component={SignUp} />
+            <Stack.Screen
+              name='SignUp'
+              options={{
+                title: 'Sign Up',
+                headerRight: '',
+              }}
+              component={SignUp}
+            />
           </>
         )}
       </Stack.Navigator>

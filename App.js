@@ -20,7 +20,6 @@ import theme from './src/styles';
 const authLink = setContext(async (_, { headers }) => {
   const token1 = await AsyncStorage.getItem('@gql_vocab_token');
 
-  console.log(token1, 'token1');
   return {
     headers: {
       ...headers,
@@ -29,8 +28,8 @@ const authLink = setContext(async (_, { headers }) => {
   };
 });
 const httpLink = new HttpLink({
-  //uri: 'http://localhost:4000',
-  uri: 'http://192.168.0.105:4000/',
+  uri: 'http://localhost:4000',
+  //uri: 'http://192.168.0.105:4000/',
   //192.168.0.105
 });
 

@@ -31,8 +31,7 @@ const SignInSchema = Yup.object().shape({
 
 // create a component
 const SignIn = ({ user, navigation, route, setUser }) => {
-  const [login, { data, called, loading, error: Error }] = useMutation(LOGIN);
-  console.log(data);
+  const [login, { data, called, loading, error }] = useMutation(LOGIN);
   useEffect(() => {
     if (data) {
       const Token = data.login.token;
@@ -58,7 +57,6 @@ const SignIn = ({ user, navigation, route, setUser }) => {
   };
   clearAsyncStorage();
  */
-  console.log(Error);
   const { container, headingSmall, warn, button, txtInput } = useTheme();
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -117,6 +115,15 @@ const SignIn = ({ user, navigation, route, setUser }) => {
           </ScrollView>
         )}
       </Formik>
+      <Paragraph style={warn}>
+        {called
+          ? error
+            ? `Error: ${error}`
+            : called && data && data.login.token
+            ? `Login successful`
+            : 'Login failed'
+          : ''}
+      </Paragraph>
     </ScrollView>
   );
 };

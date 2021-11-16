@@ -10,6 +10,15 @@ const theme = {
   container: {
     flex: 1,
   },
+  get wordContainer() {
+    return {
+      width: Platform.OS === 'web' ? '60%' : '80%',
+      alignSelf: 'center',
+      padding: 5,
+      margin: 5,
+    };
+  },
+
   get headingSmall() {
     return {
       fontSize: 30,
@@ -19,6 +28,13 @@ const theme = {
       margin: 10,
     };
   },
+  get pos() {
+    return {
+      fontSize: 17,
+      margin: 5,
+    };
+  },
+
   get button() {
     return {
       margin: 10,

@@ -1,20 +1,28 @@
-import { useLazyQuery, useQuery } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
+import { useMutation, useLazyQuery, useQuery } from '@apollo/client';
 import {
-  Text,
   Modal,
+  Platform,
+  Text,
   View,
+  //RefreshControl,
   StyleSheet,
-  FlatList,
   ScrollView,
+  FlatList,
 } from 'react-native';
+
 import { ADD_WORD, CURRENT_USER } from '../queries/gqlQueries';
+import { RefreshControl } from 'react-native-web-refresh-control';
+import { patchFlatListProps } from 'react-native-web-refresh-control';
+
 import { Ionicons } from '@expo/vector-icons';
 import {
   Searchbar,
   TextInput,
   ActivityIndicator,
   Colors,
+  Modal as WebModal,
+  Paragraph,
   FAB,
   useTheme,
   Portal,
@@ -23,26 +31,42 @@ import {
 import { AntDesign } from '@expo/vector-icons';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { useMutation } from '@apollo/client';
+import ItemModal from './ItemModalComponent';
 
 const wordSchema = Yup.object().shape({
   word: Yup.string().required('Required'),
 });
 
 const Home = ({ user, navigation, route, setUser }) => {
-  const { container, headingSmall, txtInput, warn, button, search, fab } =
+  const { container, headingSmall, pos, txtInput, warn, button, search, fab } =
     useTheme();
-  const [wordQuery, { data: wordData }] = useMutation(ADD_WORD);
-  const { loading, error, data } = useQuery(CURRENT_USER);
+  const [
+    wordQuery,
+    { called, loading: addWordLoading, error: addWordError, data: addWordData },
+  ] = useMutation(ADD_WORD);
+  const { loading, error, data, refetch } = useQuery(CURRENT_USER);
   const [visible, setVisible] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState('');
+  const [flatData, setFlatData] = React.useState([]);
   const onChangeSearch = (query) => setSearchQuery(query);
+  const [refreshing, setRefreshing] = React.useState(false);
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
+  console.log(flatData);
 
-  useEffect(() => {
-    console.log(wordData, data);
-  }, [wordData]);
+  React.useEffect(() => {
+    setFlatData(data?.currentUser?.words);
+  }, [data?.currentUser?.words]);
+
+  React.useEffect(() => {
+    const dataField =
+      searchQuery !== ''
+        ? flatData.filter((data) => data.word.includes(searchQuery))
+        : data?.currentUser?.words;
+    console.log(searchQuery, dataField);
+    setFlatData(dataField);
+  }, [searchQuery]);
+  //data?.currentUser?.words ??
 
   if (loading)
     return <ActivityIndicator animating={true} color={Colors.red800} />;
@@ -53,11 +77,47 @@ const Home = ({ user, navigation, route, setUser }) => {
         placeholder='Search'
         onChangeText={onChangeSearch}
         value={searchQuery}
-        style={search}
+        style={{ ...search }}
       />
+
+      <Text style={{ ...pos, alignSelf: 'center' }}>Pull down to refetch</Text>
+
+      <FlatList
+        data={flatData}
+        renderItem={(item) => <ItemModal {...item} />}
+        keyExtractor={(item) => item._id}
+        /*  refreshControl={
+          <RefreshControl
+            onLayout={(e) => console.log(e.nativeEvent)}
+            // all properties must be transparent
+            tintColor='red'
+            colors={['red']}
+            style={{ backgroundColor: 'red' }}
+            refreshing={refreshing}
+            onRefresh={() => {
+              setRefreshing(true);
+              /*    setTimeout(() => {
+                this._addRows();
+              }, 2000);
+           }} */
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={() => {
+              setRefreshing(true);
+              setTimeout(() => {
+                setRefreshing(false);
+                refetch();
+              }, 5000);
+            }}
+          />
+        }
+      />
+
       <Portal>
-        <Modal
+        <RenderModal
           visible={visible}
+          animationType='slide'
           onDismiss={hideModal}
           contentContainerStyle={{
             backgroundColor: 'white',
@@ -66,15 +126,6 @@ const Home = ({ user, navigation, route, setUser }) => {
             width: '100%',
             justifyContent: 'start',
           }}>
-          <Button
-            icon={() => <AntDesign name='close' size={24} color='black' />}
-            onPress={hideModal}
-            style={{
-              position: 'absolute',
-              top: 20,
-              right: 20,
-            }}
-          />
           <Formik
             initialValues={{ word: '' }}
             validationSchema={wordSchema}
@@ -93,6 +144,17 @@ const Home = ({ user, navigation, route, setUser }) => {
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}>
+                <Button
+                  icon='close'
+                  onPress={hideModal}
+                  style={{
+                    position: 'absolute',
+                    top: 5,
+                    margin: 10,
+                    right: 10,
+                  }}
+                />
+
                 <Text style={headingSmall}>ADD NEW WORD </Text>
 
                 <TextInput
@@ -107,12 +169,19 @@ const Home = ({ user, navigation, route, setUser }) => {
                 <Button mode='contained' onPress={handleSubmit} style={button}>
                   Submit
                 </Button>
+                <Paragraph style={warn}>
+                  {called
+                    ? addWordError || error
+                      ? JSON.stringify(addWordError.graphQLErrors[0].message) +
+                        JSON.stringify(error)
+                      : addWordData?.addWord
+                    : ''}
+                </Paragraph>
               </View>
             )}
           </Formik>
-        </Modal>
+        </RenderModal>
       </Portal>
-
       <FAB small icon='plus' style={fab} onPress={showModal} />
     </View>
   );
@@ -122,9 +191,19 @@ export default Home;
 
 /*< FlatList
         data={DATA}
-        renderItem={renderItem}
+        renderItem={ItemModal}
         keyExtractor={(item) => item.id}
       /> */
+
+function RenderModal(props) {
+  if (Platform.OS === 'web') {
+    return <WebModal {...props} />;
+  }
+
+  return <Modal {...props} />;
+}
+/* {<AntDesign name='close' size={24} color='black' />}
+ */
 
 /*  <Portal>
            <Modal
