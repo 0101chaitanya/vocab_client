@@ -1,0 +1,34 @@
+{
+  "files": {
+    "app.js": "/vocab_client/static/js/app.e3d4d645.chunk.js",
+    "app.js.map": "/vocab_client/static/js/app.e3d4d645.chunk.js.map",
+    "runtime~app.js": "/vocab_client/static/js/runtime~app.1576edc4.js",
+    "runtime~app.js.map": "/vocab_client/static/js/runtime~app.1576edc4.js.map",
+    "static/js/2.989441d2.chunk.js": "/vocab_client/static/js/2.989441d2.chunk.js",
+    "static/js/2.989441d2.chunk.js.map": "/vocab_client/static/js/2.989441d2.chunk.js.map",
+    "fonts/AntDesign.ttf": "/vocab_client/./fonts/AntDesign.ttf",
+    "fonts/Entypo.ttf": "/vocab_client/./fonts/Entypo.ttf",
+    "fonts/Feather.ttf": "/vocab_client/./fonts/Feather.ttf",
+    "fonts/FontAwesome.ttf": "/vocab_client/./fonts/FontAwesome.ttf",
+    "fonts/FontAwesome5_Brands.ttf": "/vocab_client/./fonts/FontAwesome5_Brands.ttf",
+    "fonts/FontAwesome5_Solid.ttf": "/vocab_client/./fonts/FontAwesome5_Solid.ttf",
+    "fonts/Fontisto.ttf": "/vocab_client/./fonts/Fontisto.ttf",
+    "fonts/Foundation.ttf": "/vocab_client/./fonts/Foundation.ttf",
+    "fonts/Ionicons.ttf": "/vocab_client/./fonts/Ionicons.ttf",
+    "fonts/MaterialCommunityIcons.ttf": "/vocab_client/./fonts/MaterialCommunityIcons.ttf",
+    "fonts/MaterialIcons.ttf": "/vocab_client/./fonts/MaterialIcons.ttf",
+    "fonts/SimpleLineIcons.ttf": "/vocab_client/./fonts/SimpleLineIcons.ttf",
+    "favicon-16.png": "/vocab_client/favicon-16.png",
+    "favicon-32.png": "/vocab_client/favicon-32.png",
+    "favicon.ico": "/vocab_client/favicon.ico",
+    "index.html": "/vocab_client/index.html",
+    "manifest.json": "/vocab_client/manifest.json",
+    "serve.json": "/vocab_client/serve.json",
+    "static/js/2.989441d2.chunk.js.LICENSE.txt": "/vocab_client/static/js/2.989441d2.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime~app.1576edc4.js",
+    "static/js/2.989441d2.chunk.js",
+    "static/js/app.e3d4d645.chunk.js"
+  ]
+}
