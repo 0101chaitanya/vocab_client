@@ -28,7 +28,8 @@ const authLink = setContext(async (_, { headers }) => {
   };
 });
 const httpLink = new HttpLink({
-  uri: 'http://localhost:4000',
+  // uri: 'http://localhost:4000',
+  uri: 'https://apollo-vocab-serve.herokuapp.com/',
   //uri: 'http://192.168.0.105:4000/',
   //192.168.0.105
 });
