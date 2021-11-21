@@ -30,48 +30,38 @@ const MainComponent = () => {
     };
 
     res();
-  }, [user.token]);
+  }, []);
   return (
     <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={({ navigation }) => ({
-          headerRight: () => (
-            <Button
-              onPress={() => {
-                AsyncStorage.clear();
-                setUser({
-                  token: null,
-                  user: {},
-                });
-              }}>
-              Log out
-            </Button>
-          ),
-        })}>
+      <Stack.Navigator>
         {user.token ? (
           <>
-            <Stack.Screen name='Home'>
+            <Stack.Screen
+              name=' '
+              options={({ navigation, route }) => ({
+                headerShown: false,
+                headerRight: (props) => (
+                  <Button
+                    onPress={() => {
+                      AsyncStorage.clear();
+                      setUser({
+                        token: null,
+                        user: {},
+                      });
+                    }}>
+                    Log out
+                  </Button>
+                ),
+              })}>
               {(props) => <Home user={user} setUser={setUser} {...props} />}
             </Stack.Screen>
           </>
         ) : (
           <>
-            <Stack.Screen
-              name='SignIn'
-              options={{
-                title: 'Sign in',
-                headerRight: '',
-              }}>
+            <Stack.Screen name='SignIn'>
               {(props) => <SignIn user={user} setUser={setUser} {...props} />}
             </Stack.Screen>
-            <Stack.Screen
-              name='SignUp'
-              options={{
-                title: 'Sign Up',
-                headerRight: '',
-              }}
-              component={SignUp}
-            />
+            <Stack.Screen name='SignUp' component={SignUp} />
           </>
         )}
       </Stack.Navigator>

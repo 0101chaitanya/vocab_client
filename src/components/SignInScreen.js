@@ -10,6 +10,7 @@ import {
   FAB,
   Paragraph,
   useTheme,
+  ActivityIndicator,
 } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -32,25 +33,31 @@ const SignInSchema = Yup.object().shape({
 // create a component
 const SignIn = ({ user, navigation, route, setUser }) => {
   const [login, { data, called, loading, error }] = useMutation(LOGIN);
+  const [loadingView, setLoadingView] = useState(null);
+  const logRef = React.createRef(null);
+
   useEffect(() => {
+    console.log(data, loading, error);
     if (data) {
       const Token = data.login.token;
-      setUser((prevUser) => ({
-        ...prevUser,
-        token: Token,
-      }));
       console.log(Token);
-      (async () => {
+      const settingToken = async () => {
         await AsyncStorage.setItem('@gql_vocab_token', Token);
 
-        const lol = await AsyncStorage.getItem('@gql_vocab_token');
-
-        console.log('res', lol);
-        return lol;
-      })();
+        setUser((prevUser) => ({
+          ...prevUser,
+          token: Token,
+        }));
+        setLoadingView(false);
+      };
+      settingToken();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
+    setLoadingView(false);
+    /*  setTimeout(() => {
+      logRef.current.Text = '';
+    }, 7000);
+    */ // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, loading, error]);
 
   /*   const clearAsyncStorage = async () => {
     return AsyncStorage.clear();
@@ -58,6 +65,11 @@ const SignIn = ({ user, navigation, route, setUser }) => {
   clearAsyncStorage();
  */
   const { container, headingSmall, warn, button, txtInput } = useTheme();
+
+  if (loadingView) {
+    return <ActivityIndicator animating={true} color='red' />;
+  }
+
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
       <Formik
@@ -65,6 +77,8 @@ const SignIn = ({ user, navigation, route, setUser }) => {
         validationSchema={SignInSchema}
         onSubmit={({ username, password }) => {
           console.log(username, password);
+          setLoadingView(true);
+
           login({
             variables: {
               username,
@@ -112,18 +126,13 @@ const SignIn = ({ user, navigation, route, setUser }) => {
               style={button}>
               SignUp
             </Button>
+            <Paragraph style={{ ...warn, marginTop: 20 }}>
+              {loading ? 'Loading' : ''}
+              {error ? 'Error' : ''}
+            </Paragraph>
           </ScrollView>
         )}
       </Formik>
-      <Paragraph style={warn}>
-        {called
-          ? error
-            ? `Error: ${error}`
-            : called && data && data.login.token
-            ? `Login successful`
-            : 'Login failed'
-          : ''}
-      </Paragraph>
     </ScrollView>
   );
 };

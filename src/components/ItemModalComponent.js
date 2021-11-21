@@ -18,7 +18,7 @@ import {
   Card,
   useTheme,
 } from 'react-native-paper';
-
+import { Entypo } from '@expo/vector-icons';
 // create a component
 const ItemModal = ({ item }) => {
   const {
@@ -36,18 +36,50 @@ const ItemModal = ({ item }) => {
   const [visible, setVisible] = React.useState(false);
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
-
+  console.log(item);
   return (
     <Card style={{ ...wordContainer }}>
       <Pressable onPress={showModal}>
         <Headline
           style={{
-            color: colors.primary,
+            fontFamily: 'KumbhSans',
+            fontWeight: 'bold',
             paddingLeft: 15,
+            justifyContent: 'flex-start',
           }}>
-          {item.word.toUpperCase()}
+          {item.word}
         </Headline>
+        <View style={{ flexWrap: 'wrap' }}>
+          {item.meanings.map((current, i) => (
+            <View
+              style={{
+                flexDirection: 'column',
+                padding: 10,
+                justifyContent: 'flex-start',
+              }}>
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontFamily: 'KumbhSans',
+                  flexWrap: 'wrap',
+                  padding: 5,
+                }}>
+                ({current.partOfSpeech})
+              </Text>
 
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontFamily: 'KumbhSans',
+                  flexWrap: 'wrap',
+                  padding: 5,
+                  wordBreak: 'breakWord',
+                }}>
+                {current.definitions[0].definition}
+              </Text>
+            </View>
+          ))}
+        </View>
         <Portal>
           <RenderModal
             visible={visible}
@@ -71,15 +103,28 @@ const ItemModal = ({ item }) => {
                 }}
               />
 
-              <Headline>Word : {item.word.toUpperCase()}</Headline>
+              <Headline
+                style={{
+                  fontSize: 30,
+                  margin: 10,
+                  fontFamily: 'KumbhSans',
+                  fontWeight: 'bold',
+                }}>
+                {item.word}
+              </Headline>
               <Text style={pos}>Origin : {item.origin}</Text>
               <Text style={pos}>Phonetic : {item.phonetic}</Text>
 
-              {item.meanings.map((item, i) => (
-                <View key={i}>
-                  <Text style={pos}>Part of speech : {item.partOfSpeech}</Text>
-                  {item.definitions.map((definitionItem, j) => (
-                    <View key={j}>
+              {item.meanings.map((current, i) => (
+                <View key={i} style={{ padding: 10 }}>
+                  <Text style={{ ...pos, fontStyle: 'italic' }}>
+                    <Entypo name='dot-single' size={24} color='black' />
+                    Part of speech : {current.partOfSpeech}
+                  </Text>
+                  {current.definitions.map((definitionItem, j) => (
+                    <View
+                      key={j}
+                      style={{ paddingLeft: 30, paddingBottom: 20 }}>
                       <Text style={pos}>
                         Definition : {definitionItem.definition}
                       </Text>

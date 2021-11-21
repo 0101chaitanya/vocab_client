@@ -7,31 +7,48 @@ const theme = {
     ...DefaultTheme.colors,
     primary: 'red',
   },
+  font: {
+    fontFamily: 'KumbhSans',
+  },
   container: {
     flex: 1,
+    fontFamily: 'KumbhSans',
   },
+  get diag() {
+    return {
+      alignSelf: 'center',
+      margin: 10,
+      padding: 15,
+      width: Platform.OS === 'web' ? '60%' : '80%',
+      fontFamily: 'KumbhSans',
+    };
+  },
+
   get wordContainer() {
     return {
-      width: Platform.OS === 'web' ? '60%' : '80%',
+      width: Platform.OS === 'web' ? '61%' : '80%',
       alignSelf: 'center',
       padding: 5,
       margin: 5,
+      fontFamily: 'KumbhSans',
     };
   },
 
   get headingSmall() {
     return {
-      fontSize: 30,
-      color: this.colors.primary,
-      textDecorationLine: 'underline',
-      alignSelf: 'center',
+      fontFamily: 'KumbhSans',
+
+      padding: 20,
+      fontSize: 25,
+      alignSelf: 'flex-start',
       margin: 10,
     };
   },
   get pos() {
     return {
-      fontSize: 17,
+      padding: 5,
       margin: 5,
+      fontFamily: 'KumbhSans',
     };
   },
 
@@ -42,6 +59,7 @@ const theme = {
       borderRadius: 10,
       width: Platform.OS === 'web' ? '40%' : '80%',
       alignSelf: 'center',
+      fontFamily: 'KumbhSans',
     };
   },
   get warn() {
@@ -50,13 +68,16 @@ const theme = {
       color: this.colors.primary,
       margin: 10,
       alignSelf: 'center',
+      fontFamily: 'KumbhSans',
     };
   },
   get txtInput() {
     return {
+      backgroundColor: 'white',
       color: this.colors.primary,
       width: Platform.OS === 'web' ? '40%' : '80%',
       alignSelf: 'center',
+      fontFamily: 'KumbhSans',
     };
   },
   get search() {
@@ -65,6 +86,7 @@ const theme = {
       width: Platform.OS === 'web' ? '60%' : '80%',
       alignSelf: 'center',
       borderRadius: 10,
+      fontFamily: 'KumbhSans',
     };
   },
   get fab() {
@@ -74,6 +96,7 @@ const theme = {
       margin: 20,
       right: 0,
       bottom: 0,
+      fontFamily: 'KumbhSans',
     };
   },
 };

@@ -8,6 +8,29 @@ const CURRENT_USER = gql`
     }
   }
 `;
+const SEARCH_QUERY = gql`
+  query ($searchQuery: String!) {
+    matchingWords(searchQuery: $searchQuery) {
+      id
+      word
+      phonetic
+      origin
+      phonetics {
+        audio
+        text
+      }
+      meanings {
+        partOfSpeech
+        definitions {
+          antonyms
+          definition
+          example
+          synonyms
+        }
+      }
+    }
+  }
+`;
 
 const ALL_WORDS = gql`
   query {
@@ -53,4 +76,4 @@ const ADD_WORD = gql`
   }
 `;
 
-export { ADD_WORD, ALL_WORDS, LOGIN, REGISTER, CURRENT_USER };
+export { ADD_WORD, ALL_WORDS, LOGIN, REGISTER, SEARCH_QUERY, CURRENT_USER };

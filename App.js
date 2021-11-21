@@ -1,8 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { Platform, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFonts } from 'expo-font';
 
 import {
   ApolloClient,
@@ -29,9 +30,10 @@ const authLink = setContext(async (_, { headers }) => {
 });
 const httpLink = new HttpLink({
   // uri: 'http://localhost:4000',
-  uri: 'https://apollo-vocab-serve.herokuapp.com/',
-  //uri: 'http://192.168.0.105:4000/',
+  //uri: 'https://apollo-vocab-serve.herokuapp.com/',
+  uri: 'http://192.168.0.105:4001/',
   //192.168.0.105
+  //uri: 'http://localhost:4001/',
 });
 
 const client = new ApolloClient({
@@ -41,8 +43,19 @@ const client = new ApolloClient({
 });
 
 export default function App() {
+  const [loaded] = useFonts({
+    KumbhSans: require('./assets/fonts/KumbhSans-VariableFont_wght.ttf'),
+  });
+
+  if (!loaded) {
+    return null;
+  }
+
   return (
-    <SafeAreaView style={theme.container}>
+    <SafeAreaView
+      style={{
+        ...theme.container,
+      }}>
       <StatusBar style='auto' />
       <ApolloProvider client={client}>
         <PaperProvider theme={theme}>
