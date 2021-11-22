@@ -1,11 +1,11 @@
 {
   "files": {
-    "app.js": "/vocab_client/static/js/app.e3d4d645.chunk.js",
-    "app.js.map": "/vocab_client/static/js/app.e3d4d645.chunk.js.map",
+    "app.js": "/vocab_client/static/js/app.4321cc14.chunk.js",
+    "app.js.map": "/vocab_client/static/js/app.4321cc14.chunk.js.map",
     "runtime~app.js": "/vocab_client/static/js/runtime~app.1576edc4.js",
     "runtime~app.js.map": "/vocab_client/static/js/runtime~app.1576edc4.js.map",
-    "static/js/2.989441d2.chunk.js": "/vocab_client/static/js/2.989441d2.chunk.js",
-    "static/js/2.989441d2.chunk.js.map": "/vocab_client/static/js/2.989441d2.chunk.js.map",
+    "static/js/2.20939d9f.chunk.js": "/vocab_client/static/js/2.20939d9f.chunk.js",
+    "static/js/2.20939d9f.chunk.js.map": "/vocab_client/static/js/2.20939d9f.chunk.js.map",
     "fonts/AntDesign.ttf": "/vocab_client/./fonts/AntDesign.ttf",
     "fonts/Entypo.ttf": "/vocab_client/./fonts/Entypo.ttf",
     "fonts/Feather.ttf": "/vocab_client/./fonts/Feather.ttf",
@@ -15,6 +15,7 @@
     "fonts/Fontisto.ttf": "/vocab_client/./fonts/Fontisto.ttf",
     "fonts/Foundation.ttf": "/vocab_client/./fonts/Foundation.ttf",
     "fonts/Ionicons.ttf": "/vocab_client/./fonts/Ionicons.ttf",
+    "fonts/KumbhSans-VariableFont_wght.ttf": "/vocab_client/./fonts/KumbhSans-VariableFont_wght.ttf",
     "fonts/MaterialCommunityIcons.ttf": "/vocab_client/./fonts/MaterialCommunityIcons.ttf",
     "fonts/MaterialIcons.ttf": "/vocab_client/./fonts/MaterialIcons.ttf",
     "fonts/SimpleLineIcons.ttf": "/vocab_client/./fonts/SimpleLineIcons.ttf",
@@ -24,11 +25,11 @@
     "index.html": "/vocab_client/index.html",
     "manifest.json": "/vocab_client/manifest.json",
     "serve.json": "/vocab_client/serve.json",
-    "static/js/2.989441d2.chunk.js.LICENSE.txt": "/vocab_client/static/js/2.989441d2.chunk.js.LICENSE.txt"
+    "static/js/2.20939d9f.chunk.js.LICENSE.txt": "/vocab_client/static/js/2.20939d9f.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime~app.1576edc4.js",
-    "static/js/2.989441d2.chunk.js",
-    "static/js/app.e3d4d645.chunk.js"
+    "static/js/2.20939d9f.chunk.js",
+    "static/js/app.4321cc14.chunk.js"
   ]
 }
