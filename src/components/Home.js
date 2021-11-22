@@ -10,12 +10,12 @@ import {
   ScrollView,
   FlatList,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { ADD_WORD, CURRENT_USER, SEARCH_QUERY } from '../queries/gqlQueries';
 import { RefreshControl } from 'react-native-web-refresh-control';
 import { patchFlatListProps } from 'react-native-web-refresh-control';
-
-import { Ionicons } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 import {
   Searchbar,
   TextInput,
@@ -30,11 +30,10 @@ import {
   Portal,
   Button,
 } from 'react-native-paper';
-import { AntDesign } from '@expo/vector-icons';
 import { Formik, useFormik } from 'formik';
 import * as Yup from 'yup';
 import ItemModal from './ItemModalComponent';
-
+import { Entypo } from '@expo/vector-icons';
 const wordSchema = Yup.object().shape({
   word: Yup.string().required('Required'),
 });
@@ -47,7 +46,10 @@ const Home = ({ user, navigation, route, setUser }) => {
     txtInput,
     warn,
     button,
+    scrollContainer,
     search,
+    colors,
+    card,
     fab,
     diag,
   } = useTheme();
@@ -67,12 +69,15 @@ const Home = ({ user, navigation, route, setUser }) => {
     refetchQueries: [{ query: CURRENT_USER }],
   });
   const { loading, error, data, refetch } = useQuery(CURRENT_USER);
+  const [pages, setPages] = useState({
+    current: 0,
+    data: [],
+  });
   const onChangeSearch = (query) => setSearchQuery(query);
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
   console.log(flatData);
   const formRef = React.useRef(null);
-  console.log(formRef);
   React.useEffect(() => {
     setFlatData(data?.currentUser?.words);
   }, [data?.currentUser?.words]);
@@ -86,59 +91,106 @@ const Home = ({ user, navigation, route, setUser }) => {
     setFlatData(dataField);
   }, [searchQuery, searchData, searchError]);
   //  getData({ variables: { searchQuery } });
+  React.useEffect(() => {
+    if (flatData) {
+      console.log(flatData.length);
+      let arrayAfterProcess = [];
+      let TargetArr;
+      const fun = (input) => {
+        TargetArr = [...input];
+        if (TargetArr.length > 8) {
+          arrayAfterProcess.push(TargetArr.splice(0, 4));
+          console.log(arrayAfterProcess);
+          console.log(TargetArr);
+          fun(TargetArr);
+        }
+        //return arrayAfterProcess.push(TargetArr);
+      };
+      fun(flatData);
+      setPages({ ...pages, data: arrayAfterProcess.concat([TargetArr]) });
+      console.log(pages);
+    }
+    //fun(flatData);
+  }, [flatData]);
 
+  const [state, setState] = React.useState({ open: false });
+
+  const onStateChange = ({ open }) => setState({ open });
+
+  const { open } = state;
   if (loading)
-    return <ActivityIndicator animating={true} color={Colors.red800} />;
+    return <ActivityIndicator animating={true} color={Colors.primary} />;
   if (error) return <Text>Error! {error.message}</Text>;
   return (
-    <View style={{ ...container, top: 30, marginBottom: 40 }}>
-      <Button
-        style={{ margin: 10 }}
-        onPress={() => {
-          AsyncStorage.clear();
-          setUser({
-            token: null,
-            user: {},
-          });
-        }}>
-        Log out
-      </Button>
-
-      <Searchbar
-        onChangeText={onChangeSearch}
-        value={searchQuery}
-        style={{ ...search }}
-        placeholder='Search'
-        onIconPress={() => {
-          getData({ variables: { searchQuery } });
-        }}
-      />
-      <Card
+    <View style={{ ...container, alignItems: 'center' }}>
+      <View
         style={{
-          width: Platform.OS === 'web' ? '60%' : '80%',
-          justifySelf: 'center',
+          ...container(),
+          flexDirection: 'row',
           alignSelf: 'center',
-          borderTopLeftRadius: 20,
-          borderTopRightRadius: 20,
-          marginTop: 5,
-          right: Platform.OS === 'web' ? 8 : 0,
+          marginTop: 0,
+          padding: 20,
+          flex: 1,
+          justifyContent: 'center',
+          width: '100%',
+          backgroundColor: colors.primary,
         }}>
+        <Text
+          style={{
+            ...headingSmall(),
+            position: 'absolute',
+            left: 10,
+            color: 'white',
+          }}>
+          Vocab
+        </Text>
+        <Searchbar
+          onChangeText={onChangeSearch}
+          value={searchQuery}
+          style={{
+            ...search(),
+            backgroundColor: '#db6ac3',
+          }}
+          inputStyle={{
+            color: 'white',
+          }}
+          placeholder='Search'
+          onIconPress={() => {
+            getData({ variables: { searchQuery } });
+          }}
+        />
+        <Button
+          icon={() => <AntDesign name='logout' size={30} color='white' />}
+          style={{ position: 'absolute', right: 10 }}
+          onPress={() => {
+            AsyncStorage.clear();
+            setUser({
+              token: null,
+              user: {},
+            });
+          }}
+        />
+      </View>
+      <Card style={card(undefined, 'flex-start')}>
         <Card.Title title='Words List' />
       </Card>
       <FlatList
-        data={flatData}
+        contentContainerStyle={{ scrollContainer }}
+        data={pages.data[pages.current]}
         renderItem={(item) => <ItemModal {...item} />}
-        keyExtractor={(item) => item._id || item.id}
+        keyExtractor={(item) => item._id ?? item.id}
       />
 
       <Portal>
         <Dialog
           visible={visible}
           dismissable
-          style={diag}
+          style={diag()}
           onDismiss={hideModal}>
           <View>
-            <Dialog.Title style={headingSmall}>Add to Dictionary</Dialog.Title>
+            <Dialog.Title style={headingSmall()}>
+              Add to Dictionary
+            </Dialog.Title>
             <Dialog.Content>
               <Formik
                 initialValues={{ word: '' }}
@@ -160,14 +212,9 @@ const Home = ({ user, navigation, route, setUser }) => {
                   handleSubmit,
                   values,
                 }) => (
-                  <View
-                    style={{
-                      ...container,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}>
+                  <View style={container()}>
                     <TextInput
-                      style={txtInput}
+                      style={txtInput()}
                       onChangeText={handleChange('word')}
                       onBlur={handleBlur('word')}
                       value={values.word}
@@ -191,15 +238,79 @@ const Home = ({ user, navigation, route, setUser }) => {
           </View>
         </Dialog>
       </Portal>
+      <Portal>
+        <FAB.Group
+          open={open}
+          icon={() => <Entypo name='menu' size={24} color='black' />}
+          actions={[
+            {
+              icon: 'plus',
+              label: 'Add word',
+              onPress: () => showModal(),
+              small: false,
+            },
+            {
+              icon: () => <Entypo name='forward' size={24} color='black' />,
+              label: 'Go Forward',
+              onPress: () => {
+                let length = pages.data.length;
 
-      <FAB small icon='plus' style={fab} onPress={showModal} />
+                if (pages.current < pages.data.length - 1) {
+                  setPages({
+                    ...pages,
+                    current: pages.current + 1,
+                  });
+                } else {
+                  setPages({
+                    ...pages,
+                    current: 0,
+                  });
+                }
+              },
+              small: false,
+            },
+            {
+              icon: () => <Entypo name='back' size={24} color='black' />,
+              label: 'Go Back',
+              onPress: () => {
+                let length = pages.data.length;
+
+                if (pages.current > 1) {
+                  setPages({
+                    ...pages,
+                    current: pages.current - 1,
+                  });
+                } else {
+                  setPages({
+                    ...pages,
+                    current: pages.data.length - 1,
+                  });
+                }
+              },
+              small: false,
+            },
+          ]}
+          onStateChange={onStateChange}
+          onPress={() => {
+            if (open) {
+              // do something if the speed dial is open
+            }
+          }}
+        />
+      </Portal>
     </View>
   );
 };
 
 export default Home;
 
-/* 
+/*
+
+      <FAB small icon='plus' style={fab()}  />
+      <FAB small icon='plus' style={fab()} onPress={showModal} />
+
+      <FAB small icon='plus' style={fab()} onPress={showModal} />
+
 refreshControl={
           <RefreshControl
             refreshing={refreshing}

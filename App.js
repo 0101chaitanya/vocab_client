@@ -29,10 +29,9 @@ const authLink = setContext(async (_, { headers }) => {
   };
 });
 const httpLink = new HttpLink({
-  // uri: 'http://localhost:4000',
-  //uri: 'https://apollo-vocab-serve.herokuapp.com/',
-  uri: 'http://192.168.0.105:4001/',
-  //192.168.0.105
+  uri: 'https://apollo-vocab-serve.herokuapp.com/',
+
+  //uri: 'http://192.168.0.105:4001/',
   //uri: 'http://localhost:4001/',
 });
 
@@ -50,11 +49,10 @@ export default function App() {
   if (!loaded) {
     return null;
   }
-
   return (
     <SafeAreaView
       style={{
-        ...theme.container,
+        ...theme.container(),
       }}>
       <StatusBar style='auto' />
       <ApolloProvider client={client}>

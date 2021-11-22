@@ -32,11 +32,19 @@ const SignupSchema = Yup.object().shape({
 
 // create a component
 const SignIn = ({ user, navigation, route, setUser }) => {
-  const { container, headingSmall, warn, button, txtInput } = useTheme();
+  const {
+    container,
+    scrollContainer,
+    headingSmall,
+    supplText,
+    warn,
+    button,
+    txtInput,
+  } = useTheme();
 
   const [register, registerResult] = useMutation(REGISTER);
   return (
-    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+    <View style={{ ...container() }}>
       <Formik
         initialValues={{ username: '', password: '', passwordConfirmation: '' }}
         validationSchema={SignupSchema}
@@ -49,19 +57,19 @@ const SignIn = ({ user, navigation, route, setUser }) => {
           });
         }}>
         {({ handleChange, errors, handleBlur, handleSubmit, values }) => (
-          <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-            <Text style={headingSmall}>Sign Up</Text>
+          <View style={{ ...container() }}>
+            <Text style={headingSmall()}>Sign Up</Text>
             <TextInput
-              style={txtInput}
+              style={txtInput()}
               onChangeText={handleChange('username')}
               onBlur={handleBlur('username')}
               value={values.username}
               mode='outlined'
               label='Username'
             />
-            <Text style={warn}>{errors.username}</Text>
+            <Text style={warn()}>{errors.username}</Text>
             <TextInput
-              style={txtInput}
+              style={txtInput()}
               onChangeText={handleChange('password')}
               onBlur={handleBlur('password')}
               value={values.password}
@@ -70,9 +78,9 @@ const SignIn = ({ user, navigation, route, setUser }) => {
               secureTextEntry={true}
             />
 
-            <Text style={warn}>{errors.password}</Text>
+            <Text style={warn()}>{errors.password}</Text>
             <TextInput
-              style={txtInput}
+              style={txtInput()}
               onChangeText={handleChange('passwordConfirmation')}
               onBlur={handleBlur('passwordConfirmation')}
               value={values.passwordConfirmation}
@@ -81,28 +89,22 @@ const SignIn = ({ user, navigation, route, setUser }) => {
               secureTextEntry={true}
             />
 
-            <Text style={warn}>{errors.passwordConfirmation}</Text>
+            <Text style={warn()}>{errors.passwordConfirmation}</Text>
 
-            <Button mode='contained' onPress={handleSubmit} style={button}>
+            <Button mode='contained' onPress={handleSubmit} style={button()}>
               Submit
             </Button>
-            <Text
-              style={{
-                color: 'red',
-                alignSelf: 'center',
-              }}>
-              OR
-            </Text>
+            <Text style={supplText()}>OR</Text>
             <Button
               mode='contained'
               onPress={() => navigation.navigate('SignIn')}
-              style={button}>
+              style={button()}>
               SignIn
             </Button>
-          </ScrollView>
+          </View>
         )}
       </Formik>
-    </ScrollView>
+    </View>
   );
 };
 

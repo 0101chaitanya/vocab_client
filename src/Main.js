@@ -40,18 +40,6 @@ const MainComponent = () => {
               name=' '
               options={({ navigation, route }) => ({
                 headerShown: false,
-                headerRight: (props) => (
-                  <Button
-                    onPress={() => {
-                      AsyncStorage.clear();
-                      setUser({
-                        token: null,
-                        user: {},
-                      });
-                    }}>
-                    Log out
-                  </Button>
-                ),
               })}>
               {(props) => <Home user={user} setUser={setUser} {...props} />}
             </Stack.Screen>
@@ -71,3 +59,18 @@ const MainComponent = () => {
 
 export default MainComponent;
 //animationTypeForReplace: !user.id ? 'pop' : 'push',
+/* 
+      headerRight: (props) => (
+                  <Button
+                    onPress={() => {
+                      AsyncStorage.clear();
+                      setUser({
+                        token: null,
+                        user: {},
+                      });
+                    }}>
+                    Log out
+                  </Button>
+                ),
+           
+*/

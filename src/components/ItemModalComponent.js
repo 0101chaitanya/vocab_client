@@ -30,25 +30,18 @@ const ItemModal = ({ item }) => {
     button,
     search,
     colors,
+    headline,
     fab,
     pos,
+    scrollContainer,
   } = useTheme();
   const [visible, setVisible] = React.useState(false);
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
-  console.log(item);
   return (
-    <Card style={{ ...wordContainer }}>
+    <Card style={{ ...wordContainer() }}>
       <Pressable onPress={showModal}>
-        <Headline
-          style={{
-            fontFamily: 'KumbhSans',
-            fontWeight: 'bold',
-            paddingLeft: 15,
-            justifyContent: 'flex-start',
-          }}>
-          {item.word}
-        </Headline>
+        <Headline style={headline()}>{item.word}</Headline>
         <View style={{ flexWrap: 'wrap' }}>
           {item.meanings.map((current, i) => (
             <View
@@ -56,7 +49,8 @@ const ItemModal = ({ item }) => {
                 flexDirection: 'column',
                 padding: 10,
                 justifyContent: 'flex-start',
-              }}>
+              }}
+              key={current.partOfSpeech}>
               <Text
                 style={{
                   fontSize: 16,
@@ -92,7 +86,8 @@ const ItemModal = ({ item }) => {
               width: '100%',
               justifyContent: 'start',
             }}>
-            <ScrollView contentContainerStyle={{ flexGrow: 1, padding: 20 }}>
+            <ScrollView
+              contentContainerStyle={{ ...scrollContainer, padding: 20 }}>
               <Button
                 icon='close'
                 onPress={hideModal}
@@ -103,21 +98,16 @@ const ItemModal = ({ item }) => {
                 }}
               />
 
-              <Headline
-                style={{
-                  fontSize: 30,
-                  margin: 10,
-                  fontFamily: 'KumbhSans',
-                  fontWeight: 'bold',
-                }}>
-                {item.word}
-              </Headline>
-              <Text style={pos}>Origin : {item.origin}</Text>
-              <Text style={pos}>Phonetic : {item.phonetic}</Text>
+              <Headline style={headline()}>{item.word}</Headline>
+              <Text style={pos()}>Origin : {item.origin}</Text>
+              <Text style={pos()}>Phonetic : {item.phonetic}</Text>
 
               {item.meanings.map((current, i) => (
-                <View key={i} style={{ padding: 10 }}>
-                  <Text style={{ ...pos, fontStyle: 'italic' }}>
+                <View
+                  key={i}
+                  key={current.partOfSpeech}
+                  style={{ padding: 10 }}>
+                  <Text style={{ ...pos(), fontStyle: 'italic' }}>
                     <Entypo name='dot-single' size={24} color='black' />
                     Part of speech : {current.partOfSpeech}
                   </Text>
@@ -125,16 +115,16 @@ const ItemModal = ({ item }) => {
                     <View
                       key={j}
                       style={{ paddingLeft: 30, paddingBottom: 20 }}>
-                      <Text style={pos}>
+                      <Text style={pos()}>
                         Definition : {definitionItem.definition}
                       </Text>
-                      <Text style={pos}>
+                      <Text style={pos()}>
                         Example : {definitionItem.example}
                       </Text>
-                      <Text style={pos}>
+                      <Text style={pos()}>
                         Synonyms : {definitionItem.synonyms.join(', ')}
                       </Text>
-                      <Text style={pos}>
+                      <Text style={pos()}>
                         Antonyms : {definitionItem.antonyms.join(', ')}
                       </Text>
                     </View>

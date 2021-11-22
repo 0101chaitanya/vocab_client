@@ -64,14 +64,22 @@ const SignIn = ({ user, navigation, route, setUser }) => {
   };
   clearAsyncStorage();
  */
-  const { container, headingSmall, warn, button, txtInput } = useTheme();
+  const {
+    container,
+    headingSmall,
+    warn,
+    button,
+    supplText,
+    txtInput,
+    scrollContainer,
+  } = useTheme();
 
   if (loadingView) {
     return <ActivityIndicator animating={true} color='red' />;
   }
 
   return (
-    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+    <ScrollView contentContainerStyle={{ ...scrollContainer() }}>
       <Formik
         initialValues={{ username: '', password: '' }}
         validationSchema={SignInSchema}
@@ -87,19 +95,19 @@ const SignIn = ({ user, navigation, route, setUser }) => {
           });
         }}>
         {({ handleChange, errors, handleBlur, handleSubmit, values }) => (
-          <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-            <Text style={headingSmall}>Sign In</Text>
+          <ScrollView contentContainerStyle={{ ...scrollContainer() }}>
+            <Text style={headingSmall()}>Sign In</Text>
             <TextInput
-              style={txtInput}
+              style={txtInput()}
               onChangeText={handleChange('username')}
               onBlur={handleBlur('username')}
               value={values.username}
               mode='outlined'
               label='Username'
             />
-            <Text style={warn}>{errors.username}</Text>
+            <Text style={warn()}>{errors.username}</Text>
             <TextInput
-              style={txtInput}
+              style={txtInput()}
               onChangeText={handleChange('password')}
               onBlur={handleBlur('password')}
               value={values.password}
@@ -108,22 +116,16 @@ const SignIn = ({ user, navigation, route, setUser }) => {
               secureTextEntry={true}
             />
 
-            <Text style={warn}>{errors.password}</Text>
+            <Text style={warn()}>{errors.password}</Text>
 
-            <Button mode='contained' onPress={handleSubmit} style={button}>
+            <Button mode='contained' onPress={handleSubmit} style={button()}>
               Submit
             </Button>
-            <Text
-              style={{
-                color: 'red',
-                alignSelf: 'center',
-              }}>
-              OR
-            </Text>
+            <Text style={supplText()}>OR</Text>
             <Button
               mode='contained'
               onPress={() => navigation.navigate('SignUp')}
-              style={button}>
+              style={button()}>
               SignUp
             </Button>
             <Paragraph style={{ ...warn, marginTop: 20 }}>
